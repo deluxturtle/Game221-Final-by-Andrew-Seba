@@ -1,0 +1,6 @@
+"GunName" "Handgun"
+"GunType" "PISTOL"
+"Damage" "1"
+"ClipSize" "8"
+"FireRate" "0.02"
+"Automatic" "False"

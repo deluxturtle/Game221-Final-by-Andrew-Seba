@@ -1,0 +1,1 @@
+Place all your dynamic resources in this folder.

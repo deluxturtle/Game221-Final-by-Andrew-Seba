@@ -1,0 +1,6 @@
+"GunName" "Taylors GUn"
+"GunType" "SNIPER"
+"Damage" "10000"
+"ClipSize" "3"
+"FireRate" "0.02"
+"Automatic" "False"

@@ -1,0 +1,6 @@
+"GunName" "AutoPistol"
+"GunType" "PISTOL"
+"Damage" "0.5"
+"ClipSize" "17"
+"FireRate" "0.02"
+"Automatic" "True"

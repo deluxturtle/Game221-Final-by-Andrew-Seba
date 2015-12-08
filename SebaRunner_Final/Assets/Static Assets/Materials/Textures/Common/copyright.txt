@@ -1,0 +1,3 @@
+filename: crosshairs64
+author: "para" aka "pasmateRs"
+copyright: CC0 (Public Domain)

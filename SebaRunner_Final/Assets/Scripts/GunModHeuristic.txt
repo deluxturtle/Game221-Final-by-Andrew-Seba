@@ -1,0 +1,6 @@
+"GunType" "PISTOL" 	//Other types examples: SMG, RIFLE, SNIPER, SPECIAL // the category controls ammo types as well.
+"Damage" "5" 		//How many points of damage is applied to enemies.
+"ClipSize" "17"		//How many bullets your able to shoot before reloading.
+"FireRate" "0.2" 	//Time inbetween bullets till you can fire again.
+"Automatic" "false" 	//If the gun is automatic or not. (Holding down fire button)
+
