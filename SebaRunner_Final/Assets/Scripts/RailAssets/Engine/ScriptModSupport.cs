@@ -13,6 +13,8 @@ public class ScriptModSupport : MonoBehaviour
 	public GameObject facingWaypoint;
 	public GameObject effectWaypoint;
 	public ScriptEngine player;
+    [Tooltip("Place your cate prefab that you want to see.")]
+    public GameObject crate;
 
 
 	string defaultModFileText = "Edit this file for modding timelines and delete this line";

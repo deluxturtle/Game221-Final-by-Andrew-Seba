@@ -1,22 +1,19 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 
-
+//Grid view tools
 public enum Tools
 {
     SELECT,
     MOVE
 }
 
+//Grid line drawing amount.
 enum GridLines
 {
     ONE,
@@ -87,8 +84,8 @@ namespace SebaRunnerLevelCreator
             InitializeComponent();
             typeof(Panel).InvokeMember("DoubleBuffered", System.Reflection.BindingFlags.SetProperty | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic, null, gridView, new object[] { true });
 
-            hScrollBar1.Maximum = (int)maxWorldWidth;
-            vScrollBar1.Maximum = (int)maxWorldHeight;
+            hScrollBar1.Maximum = (int)((float)maxWorldWidth / gridScale);
+            vScrollBar1.Maximum = (int)((float)maxWorldHeight / gridScale);
 
             #region Didn't work
             ////add all tool checkboxes to toggle on and off easier.
@@ -107,11 +104,6 @@ namespace SebaRunnerLevelCreator
         {
             nodePicker = new NodePicker();
             nodePicker.form1 = this;
-        }
-
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
         }
 
         //Paint!
@@ -259,6 +251,7 @@ namespace SebaRunnerLevelCreator
                     //draw the movement lines (gizmo lines)
                     if (movements.Count > 1)
                     {
+                        Pen bezierPen = Pens.White;
                         for (int i = 1; i < movements.Count; i++)
                         {
                             if (movements[i] != null && movements[i].endWaypoint != null)
@@ -278,7 +271,7 @@ namespace SebaRunnerLevelCreator
                                         //    (movements[i].curveWaypoint.x + viewOffsetX) / gridScale, (movements[i].curveWaypoint.z + viewOffsetY) / gridScale,
                                         //    (end.x + viewOffsetX) / gridScale, (end.z + viewOffsetY) / gridScale);
                                         
-                                        for(int j = 1; j <= 10; j++)
+                                        for(int j = 1; j <= 11; j++)
                                         {
                                             GameObject lineEnd = GetPoint(
                                                 new GameObject(start.x, start.y, start.z),
@@ -287,9 +280,16 @@ namespace SebaRunnerLevelCreator
                                                     movements[i].curveWaypoint.x,
                                                     movements[i].curveWaypoint.y,
                                                     movements[i].curveWaypoint.z),
-                                                j / 10f);
+                                                j / 11f);
 
-                                            e.Graphics.DrawLine(Pens.White,
+
+                                            if (selectedObj == end || selectedObj == movements[i].curveWaypoint)
+                                                bezierPen = Pens.Yellow;
+                                            else
+                                                bezierPen = Pens.White;
+
+
+                                            e.Graphics.DrawLine(bezierPen,
                                                 (start.x + viewOffsetX) / gridScale, (start.z + viewOffsetY) / gridScale,
                                                 (lineEnd.x + viewOffsetX) / gridScale, (lineEnd.z + viewOffsetY) / gridScale);
 
@@ -394,7 +394,7 @@ namespace SebaRunnerLevelCreator
         {
             t = Clamp(t);
             float oneMinusT = 1f - t;
-            return oneMinusT * oneMinusT * start + 2f * oneMinusT * t * curve + t * t * end;
+            return (oneMinusT * oneMinusT * start) + (2f * oneMinusT * t * curve) + (t * t * end);
         }
 
 
@@ -490,6 +490,7 @@ namespace SebaRunnerLevelCreator
                         selectedTimeNode = null;
                         groupBoxEnemyProperties.Visible = false;
                         labelObjName.Text = "nothing selected";
+                        groupBoxWaypointProperties.Enabled = false;
                     }
                 }
 
@@ -568,6 +569,11 @@ namespace SebaRunnerLevelCreator
         }
         #endregion
 
+        #region FileButton
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
 
         #region SaveFile
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -602,6 +608,11 @@ namespace SebaRunnerLevelCreator
                             {
                                 sw.WriteLine("O_PLAYER " + string.Format("{0},{1},{2}", node.x, obj.y, obj.z));
                             }
+                        }
+                        if(obj is Enemy)
+                        {
+                            Enemy enemy = (Enemy)obj;
+                            sw.WriteLine("O_ENEMY " + string.Format("{0} {1},{2},{3}", enemy.activationRange, enemy.x, enemy.y, enemy.z));
                         }
                     }
                     foreach(Movements move in movements)
@@ -677,6 +688,46 @@ namespace SebaRunnerLevelCreator
                                     string[] coords;
                                     string[] keywords = readline.Split('_');
                                     Node tempNode;
+
+                                    if(keywords[0].ToUpper() == "O")
+                                    {
+                                        string[] words = keywords[1].Split(' ');
+                                        switch (words[0].ToUpper())
+                                        {
+                                            case "CRATE":
+                                                Crate tempCrate = new Crate();
+                                                coords = words[1].Split(',');
+
+                                                tempCrate.x = Convert.ToSingle(coords[0]);
+                                                tempCrate.y = Convert.ToSingle(coords[1]);
+                                                tempCrate.z = Convert.ToSingle(coords[2]);
+                                                AddObject(tempCrate, false);
+                                                break;
+                                            case "PLAYER":
+                                                Node tempPlayer = new Node();
+                                                tempPlayer.isPlayer = true;
+                                                coords = words[1].Split(',');
+
+                                                tempPlayer.x = Convert.ToSingle(coords[0]);
+                                                tempPlayer.y = Convert.ToSingle(coords[1]);
+                                                tempPlayer.z = Convert.ToSingle(coords[2]);
+
+                                                AddObject(tempPlayer, false);
+                                                break;
+                                            case "ENEMY":
+                                                Enemy tempEnemy = new Enemy();
+                                                tempEnemy.activationRange = (float)Convert.ToDecimal(words[1]);
+
+                                                coords = words[2].Split(',');
+
+                                                tempEnemy.x = Convert.ToSingle(coords[0]);
+                                                tempEnemy.y = Convert.ToSingle(coords[1]);
+                                                tempEnemy.z = Convert.ToSingle(coords[2]);
+
+                                                AddObject(tempEnemy, false);
+                                                break;
+                                        }
+                                    }
 
                                     #region Movement Parsing
                                     if (keywords[0].ToUpper() == "M")
@@ -756,6 +807,7 @@ namespace SebaRunnerLevelCreator
 
         }
 
+        #endregion
         #endregion
 
         #region Tool Controls
@@ -1005,8 +1057,20 @@ namespace SebaRunnerLevelCreator
             tempMovement.movementTime = 1.0M;
             tempMovement.endWaypoint = node;
 
-            movements.Add(tempMovement);
             selectedTimeNode = tempMovement;
+
+            //show properties panel
+            groupBoxWait.Visible = false;
+            groupBoxMoveProperties.Visible = true;
+            groupBoxBezierProperties.Visible = false;
+            comboBoxWaypointType.SelectedIndex = 1;
+            labelTargetNodeName.Text = tempMovement.endWaypoint.ToString();
+            numericUpDownMoveTime.Value = Convert.ToDecimal(tempMovement.movementTime);
+
+            //Add and select and show on panel
+            groupBoxWaypointProperties.Enabled = true;
+            movements.Add(tempMovement);
+            
             panelMovement.Refresh();
             gridView.Refresh();
         }
@@ -1178,6 +1242,7 @@ namespace SebaRunnerLevelCreator
                         {
                             Node tempCurveNode = new Node();
                             movement.curveWaypoint = tempCurveNode;
+                            tempCurveNode.fillColor = Brushes.PaleGreen;
                             AddObject(tempCurveNode);
                             gridView.Refresh();
                         }

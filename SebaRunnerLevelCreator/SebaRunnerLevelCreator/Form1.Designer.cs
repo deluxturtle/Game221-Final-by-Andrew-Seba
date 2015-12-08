@@ -31,6 +31,8 @@
             this.components = new System.ComponentModel.Container();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -115,13 +117,10 @@
             this.panelLook = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.buttonNewLook = new System.Windows.Forms.Button();
+            this.hScrollBar2 = new System.Windows.Forms.HScrollBar();
             this.label5 = new System.Windows.Forms.Label();
             this.toolTipMoveTime = new System.Windows.Forms.ToolTip(this.components);
-            this.buttonNewLook = new System.Windows.Forms.Button();
-            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
-            this.hScrollBar2 = new System.Windows.Forms.HScrollBar();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.menuStrip1.SuspendLayout();
             this.gridView.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
@@ -177,6 +176,18 @@
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
+            // 
+            // newToolStripMenuItem
+            // 
+            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.newToolStripMenuItem.Text = "New";
+            this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(120, 6);
             // 
             // openToolStripMenuItem
             // 
@@ -374,7 +385,6 @@
             // tabPageViewOptions
             // 
             this.tabPageViewOptions.BackColor = System.Drawing.Color.Transparent;
-            this.tabPageViewOptions.Controls.Add(this.groupBox2);
             this.tabPageViewOptions.Controls.Add(this.checkBoxAllActivationRange);
             this.tabPageViewOptions.Controls.Add(this.checkBoxShaded);
             this.tabPageViewOptions.Controls.Add(this.labelZoomAmount);
@@ -655,7 +665,7 @@
             this.groupBoxGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBoxGridView.Location = new System.Drawing.Point(103, 3);
             this.groupBoxGridView.Name = "groupBoxGridView";
-            this.groupBoxGridView.Size = new System.Drawing.Size(941, 446);
+            this.groupBoxGridView.Size = new System.Drawing.Size(941, 519);
             this.groupBoxGridView.TabIndex = 2;
             this.groupBoxGridView.TabStop = false;
             this.groupBoxGridView.Text = "Grid View";
@@ -710,7 +720,7 @@
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 257F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1053, 715);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1053, 788);
             this.tableLayoutPanel1.TabIndex = 5;
             // 
             // tableLayoutPanel2
@@ -725,14 +735,14 @@
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(1047, 452);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(1047, 525);
             this.tableLayoutPanel2.TabIndex = 0;
             // 
             // groupBoxWaypointEditor
             // 
             this.groupBoxWaypointEditor.Controls.Add(this.tableLayoutPanel3);
             this.groupBoxWaypointEditor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBoxWaypointEditor.Location = new System.Drawing.Point(3, 461);
+            this.groupBoxWaypointEditor.Location = new System.Drawing.Point(3, 534);
             this.groupBoxWaypointEditor.Name = "groupBoxWaypointEditor";
             this.groupBoxWaypointEditor.Size = new System.Drawing.Size(1047, 251);
             this.groupBoxWaypointEditor.TabIndex = 1;
@@ -768,7 +778,7 @@
             this.groupBoxWaypointProperties.Enabled = false;
             this.groupBoxWaypointProperties.Location = new System.Drawing.Point(3, 3);
             this.groupBoxWaypointProperties.Name = "groupBoxWaypointProperties";
-            this.groupBoxWaypointProperties.Size = new System.Drawing.Size(245, 236);
+            this.groupBoxWaypointProperties.Size = new System.Drawing.Size(245, 226);
             this.groupBoxWaypointProperties.TabIndex = 3;
             this.groupBoxWaypointProperties.TabStop = false;
             this.groupBoxWaypointProperties.Text = "Waypoint Properties";
@@ -1008,7 +1018,7 @@
             this.groupBoxTimeLines.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBoxTimeLines.Location = new System.Drawing.Point(254, 3);
             this.groupBoxTimeLines.Name = "groupBoxTimeLines";
-            this.groupBoxTimeLines.Size = new System.Drawing.Size(684, 236);
+            this.groupBoxTimeLines.Size = new System.Drawing.Size(684, 226);
             this.groupBoxTimeLines.TabIndex = 2;
             this.groupBoxTimeLines.TabStop = false;
             this.groupBoxTimeLines.Text = "Time Lines";
@@ -1038,7 +1048,7 @@
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 14F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(678, 217);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(678, 207);
             this.tableLayoutPanel4.TabIndex = 3;
             // 
             // buttonAddMovement
@@ -1109,15 +1119,6 @@
             this.label3.TabIndex = 3;
             this.label3.Text = "Movement Actions";
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(55, 178);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(73, 13);
-            this.label5.TabIndex = 5;
-            this.label5.Text = "Effect Actions";
-            // 
             // buttonNewLook
             // 
             this.buttonNewLook.Location = new System.Drawing.Point(3, 67);
@@ -1126,18 +1127,6 @@
             this.buttonNewLook.TabIndex = 6;
             this.buttonNewLook.Text = "New Look";
             this.buttonNewLook.UseVisualStyleBackColor = true;
-            // 
-            // newToolStripMenuItem
-            // 
-            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.newToolStripMenuItem.Text = "New";
-            this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator5
-            // 
-            this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(149, 6);
             // 
             // hScrollBar2
             // 
@@ -1148,20 +1137,20 @@
             this.hScrollBar2.Size = new System.Drawing.Size(626, 20);
             this.hScrollBar2.TabIndex = 7;
             // 
-            // groupBox2
+            // label5
             // 
-            this.groupBox2.Location = new System.Drawing.Point(183, 441);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(171, 265);
-            this.groupBox2.TabIndex = 1;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "groupBox2";
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(55, 178);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(73, 13);
+            this.label5.TabIndex = 5;
+            this.label5.Text = "Effect Actions";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1053, 739);
+            this.ClientSize = new System.Drawing.Size(1053, 812);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.menuStrip1);
             this.KeyPreview = true;
@@ -1310,7 +1299,6 @@
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.HScrollBar hScrollBar2;
-        private System.Windows.Forms.GroupBox groupBox2;
     }
 }
 
