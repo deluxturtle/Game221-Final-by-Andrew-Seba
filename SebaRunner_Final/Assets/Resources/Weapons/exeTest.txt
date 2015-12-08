@@ -1,0 +1,6 @@
+"GunName" "exeTest"
+"GunType" "SPECIAL"
+"Damage" "1234"
+"ClipSize" "17"
+"FireRate" "0.02"
+"Automatic" "False"

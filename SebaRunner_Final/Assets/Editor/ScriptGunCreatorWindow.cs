@@ -56,12 +56,18 @@ public class ScriptGunCreatorWindow : EditorWindow {
     void SaveGun()
     {
         ScriptGun tempGun = new ScriptGun(gunName, gunType, damage, clipSize, fireRate, automatic);
-        if(!Directory.Exists(Application.dataPath + "/Weapons"))
+
+        if (!Directory.Exists(Application.dataPath + "/Resources"))
         {
-            Directory.CreateDirectory(Application.dataPath + "/Weapons");
+            Directory.CreateDirectory(Application.dataPath + "/Resources");
+            if (!Directory.Exists(Application.dataPath + "/Resources/Weapons"))
+            {
+                Directory.CreateDirectory(Application.dataPath + "/Resources/Weapons");
+            }
         }
 
-        System.IO.File.WriteAllText(Application.dataPath + "/Weapons/" + gunName + ".txt",
+
+        System.IO.File.WriteAllText(Application.dataPath + "/Resources/Weapons/" + gunName + ".txt",
             "\"GunName\" \"" + tempGun.gunName + "\"\n" +
             "\"GunType\" \"" + tempGun.type + "\"" + "\n" +
             "\"Damage\" \"" + tempGun.damage + "\"" + "\n" +
@@ -71,6 +77,6 @@ public class ScriptGunCreatorWindow : EditorWindow {
             );
 
         AssetDatabase.Refresh();
-        Debug.Log("Created \"/Weapons/" + gunName + ".txt\"");
+        Debug.Log("Created \"/Resources\"/Weapons/" + gunName + ".txt\"");
     }
 }

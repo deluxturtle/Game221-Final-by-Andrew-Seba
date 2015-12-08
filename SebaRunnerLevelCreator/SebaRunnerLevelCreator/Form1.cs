@@ -617,12 +617,15 @@ namespace SebaRunnerLevelCreator
                                 sw.WriteLine(string.Format("M_{0} {1} {2},{3},{4}",
                                     move.moveType,
                                     move.movementTime,
-                                    move.endWaypoint.x,
-                                    move.endWaypoint.y,
-                                    move.endWaypoint.z));
+                                    move.endWaypoint.x, move.endWaypoint.y,move.endWaypoint.z));
                                 break;
-                            //case MovementTypes.BEZIER:
-                            //    sw.WriteLine(string.Format("M_{0}"))
+                            case MovementTypes.BEZIER:
+                                sw.WriteLine(string.Format("M_{0} {1} {2},{3},{4} {5},{6},{7}",
+                                    move.moveType,
+                                    move.movementTime,
+                                    move.endWaypoint.x, move.endWaypoint.y, move.endWaypoint.z,
+                                    move.curveWaypoint.x, move.curveWaypoint.y, move.curveWaypoint.z));
+                                break;
                         }
                     }
                     sw.Close();
@@ -675,6 +678,7 @@ namespace SebaRunnerLevelCreator
                                     string[] keywords = readline.Split('_');
                                     Node tempNode;
 
+                                    #region Movement Parsing
                                     if (keywords[0].ToUpper() == "M")
                                     {
                                         string[] words = keywords[1].Split(' ');
@@ -695,17 +699,41 @@ namespace SebaRunnerLevelCreator
                                                 AddObject(tempNode, false);
                                                 movements.Add(tempMove);
                                                 break;
+
                                             case MovementTypes.WAIT:
                                                 tempMove = new Movements();
                                                 tempMove.moveType = MovementTypes.WAIT;
-                                                tempMove.movementTime = (Decimal)Convert.ToDouble(words[1]);
+                                                tempMove.movementTime = Convert.ToDecimal(words[1]);
 
                                                 movements.Add(tempMove);
                                                 break;
+
                                             case MovementTypes.BEZIER:
+                                                tempMove = new Movements();
+                                                tempMove.moveType = MovementTypes.BEZIER;
+                                                tempMove.movementTime = Convert.ToDecimal(words[1]);
+
+                                                tempNode = new Node();
+                                                coords = words[2].Split(',');
+                                                tempNode.x = Convert.ToSingle(coords[0]);
+                                                tempNode.y = Convert.ToSingle(coords[1]);
+                                                tempNode.z = Convert.ToSingle(coords[2]);
+                                                tempMove.endWaypoint = tempNode;
+                                                AddObject(tempNode, false);
+
+                                                tempNode = new Node();
+                                                coords = words[3].Split(',');
+                                                tempNode.x = Convert.ToSingle(coords[0]);
+                                                tempNode.y = Convert.ToSingle(coords[1]);
+                                                tempNode.z = Convert.ToSingle(coords[2]);
+                                                tempMove.curveWaypoint = tempNode;
+                                                AddObject(tempNode, false);
+
+                                                movements.Add(tempMove);
                                                 break;
                                         }
                                     }
+                                    #endregion
 
                                     //Next line
                                     readline = sr.ReadLine();
@@ -878,16 +906,9 @@ namespace SebaRunnerLevelCreator
             enemy.outlineColor = Pens.MediumVioletRed;
             //Show object properties tab
             tabControlViewOptions.SelectTab(2);
+            groupBoxEnemyProperties.Visible = true;
             numericUpDownEnemyActivationRange.Value = (decimal)enemy.activationRange;
             AddObject(enemy, true);
-        }
-
-        private void editEnemyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if(selectedObj  is Enemy)
-            {
-
-            }
         }
 
         #endregion
@@ -1107,6 +1128,8 @@ namespace SebaRunnerLevelCreator
                         groupBoxMoveProperties.Visible = false;
 
                         comboBoxWaypointType.SelectedIndex = 2;
+
+                        numericUpDownBezierTime.Value = movement.movementTime;
                         break;
                 }
                 
@@ -1260,6 +1283,32 @@ namespace SebaRunnerLevelCreator
                     
             }
             nodePicker.Show();
+        }
+
+        private void numericUpDownBezierTime_ValueChanged(object sender, EventArgs e)
+        {
+            if (selectedTimeNode is Movements)
+            {
+                Movements movement = (Movements)selectedTimeNode;
+                movement.movementTime = numericUpDownBezierTime.Value;
+                panelMovement.Refresh();
+            }
+        }
+
+        private void newToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("You will lose any unsaved progress. Are you Sure?",
+                "New File",
+                MessageBoxButtons.OKCancel);
+
+            if (result == DialogResult.OK)
+            {
+                allObjects = new List<GameObject>();
+                movements = new List<Movements>();
+                facings = new List<Facings>();
+                effects = new List<Effects>();
+            }
+            Refresh();
         }
     }
 }
