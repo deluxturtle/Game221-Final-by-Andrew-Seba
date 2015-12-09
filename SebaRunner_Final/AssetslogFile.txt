@@ -1,1 +1,1 @@
-[ERROR]: Movement was skipped due to missing element
+[ERROR]: next waypoint

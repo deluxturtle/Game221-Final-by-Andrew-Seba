@@ -130,7 +130,7 @@ public class ScriptModSupport : MonoBehaviour
                                     System.Convert.ToSingle(coords[2]));
 
                                 GameObject tempEnemy = (GameObject)Instantiate(enemy, target, Quaternion.identity);
-                                tempEnemy.GetComponent<ScriptEnemy>().health = (float)System.Convert.ToDouble(words[1]);
+                                tempEnemy.GetComponent<ScriptEnemy>().activationRange = (float)System.Convert.ToDouble(words[1]);
                                 break;
                             default:
                                 break;

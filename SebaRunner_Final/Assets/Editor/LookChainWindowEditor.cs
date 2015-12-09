@@ -1,7 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEditor;
-using System.Collections.Generic;
+
+//Andrew
+public enum ChainType{
+    MOVEMENT,
+    FACING
+}
 
 /// <summary>
 /// @author Mike Dobson
@@ -16,12 +20,15 @@ public class LookChainWindowEditor : EditorWindow {
     static ScriptEngine engine;
     static int facingFocus = 0;
 
+    static ChainType chainType;
+    public static LookChainWindowEditor window;
 
-
-    public static void Init(int FacingFocus, ScriptEngine Engine)
+    //Added the type parameter
+    public static void Init(int FacingFocus, ScriptEngine Engine, ChainType pChainType)
     {
+        chainType = pChainType;
         Debug.Log(FacingFocus);
-        LookChainWindowEditor window = (LookChainWindowEditor)EditorWindow.GetWindow(typeof(LookChainWindowEditor));
+        window = (LookChainWindowEditor)EditorWindow.GetWindow(typeof(LookChainWindowEditor), true, "Chain Editor", true);
         facingFocus = FacingFocus;
         Debug.Log(facingFocus);
         engine = Engine;
@@ -36,13 +43,19 @@ public class LookChainWindowEditor : EditorWindow {
     void OnFocus()
     {
         //engine = GameObject.FindWithTag("Player").GetComponent<ScriptEngine>();
-        lockTimes = engine.facings[facingFocus].lockTimes;
-        rotationSpeed = engine.facings[facingFocus].rotationSpeed;
-        targets = engine.facings[facingFocus].targets;
-
-        Debug.Log(lockTimes.Length);
-        Debug.Log(rotationSpeed.Length);
-        Debug.Log(targets.Length);
+        switch (chainType)
+        {
+            case ChainType.MOVEMENT:
+                lockTimes = engine.movements[facingFocus].lockTimes;
+                rotationSpeed = engine.movements[facingFocus].rotationSpeed;
+                targets = engine.movements[facingFocus].targets;
+                break;
+            case ChainType.FACING:
+                lockTimes = engine.facings[facingFocus].lockTimes;
+                rotationSpeed = engine.facings[facingFocus].rotationSpeed;
+                targets = engine.facings[facingFocus].targets;
+                break;
+        }
 
         //minimum size for the display
         minSize = new Vector2(250, 300);
@@ -107,8 +120,18 @@ public class LookChainWindowEditor : EditorWindow {
 
     void OnLostFocus()
     {
-		engine.facings [facingFocus].lockTimes = lockTimes;
-		engine.facings [facingFocus].rotationSpeed = rotationSpeed;
-		engine.facings [facingFocus].targets = targets;
+        switch (chainType)
+        {
+            case ChainType.MOVEMENT:
+                engine.movements[facingFocus].lockTimes = lockTimes;
+                engine.movements[facingFocus].rotationSpeed = rotationSpeed;
+                engine.movements[facingFocus].targets = targets;
+                break;
+            case ChainType.FACING:
+                engine.facings[facingFocus].lockTimes = lockTimes;
+                engine.facings[facingFocus].rotationSpeed = rotationSpeed;
+                engine.facings[facingFocus].targets = targets;
+                break;
+        }
     }
 }

@@ -10,7 +10,8 @@ using System.Collections.Generic;
 public class ScriptEngine : MonoBehaviour
 {
 
-	public List<ScriptMovements> movements; 
+	public List<ScriptMovements> movements;
+    public ScriptLookAtTarget moveLookAtScript;
 
 	public List<ScriptFacings> facings;
 	public List<ScriptEffects> effects;
@@ -23,7 +24,9 @@ public class ScriptEngine : MonoBehaviour
 	//private GameObject mainCamera;
 	void Awake()
 	{
-		cameraShakeScript = Camera.main.GetComponent<ScriptCameraShake>();
+        moveLookAtScript = transform.GetComponent<ScriptLookAtTarget>();
+
+        cameraShakeScript = Camera.main.GetComponent<ScriptCameraShake>();
 		lookAtScript = Camera.main.GetComponent<ScriptLookAtTarget>();
 		fadeScript = Camera.main.GetComponent<ScriptScreenFade>();
 		splatterScript = Camera.main.GetComponent<ScriptSplatter>();
@@ -89,7 +92,28 @@ public class ScriptEngine : MonoBehaviour
 						ScriptErrorLogging.logError("Movement was skipped due to missing element");
 					}
 					break;
-				default:
+                case MovementTypes.LOOKAT:
+                    //Do the facing action
+                    moveLookAtScript.Activate(move.rotationSpeed, move.targets, move.lockTimes);
+                    //Wait for the specified amount of time on the facing waypoint
+                    yield return new WaitForSeconds(move.rotationSpeed[0] + move.rotationSpeed[1] + move.lockTimes[0]);
+                    break;
+                case MovementTypes.LOOKCHAIN:
+
+                    //Do the facing action
+                    lookAtScript.Activate(move.rotationSpeed, move.targets, move.lockTimes);
+                    //Wait for the specified amount of time on the facing waypoint
+                    float waitTime = 0;
+                    for (int i = 0; i < move.targets.Length; i++)
+                    {
+                        waitTime += move.rotationSpeed[i];
+                        waitTime += move.lockTimes[i];
+                    }
+                    waitTime += move.rotationSpeed[move.rotationSpeed.Length - 1];
+                    yield return new WaitForSeconds(waitTime);
+
+                    break;
+                default:
 					ScriptErrorLogging.logError ("Invalid movement type!");
 					break;
 					

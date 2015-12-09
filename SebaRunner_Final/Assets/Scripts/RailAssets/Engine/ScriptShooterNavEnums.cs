@@ -16,7 +16,9 @@ public enum MovementTypes
 {
     WAIT,
     STRAIGHT,
-    BEZIER
+    BEZIER,
+    LOOKAT,
+    LOOKCHAIN
 };
 
 public enum FacingTypes

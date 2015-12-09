@@ -121,8 +121,11 @@ public class ScriptLoad : MonoBehaviour {
         reader.Close();
 
         File.WriteAllText(Application.dataPath + "/waypoints.txt", input);
-        
+    }
 
+    public void _LoadTestLevel()
+    {
+        Application.LoadLevel("shooterTest");
     }
 
     string FindLevel(string pName)

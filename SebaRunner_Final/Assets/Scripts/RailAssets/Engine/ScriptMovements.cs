@@ -28,4 +28,10 @@ public class ScriptMovements
 
     // Added by Nathan
     public bool dataFoldout;
+
+    //Look Variables
+    public GameObject[] targets = new GameObject[] { };
+    public float[] rotationSpeed = new float[] { };
+    public float[] lockTimes = new float[] { };
+    public int targetSize;
 }

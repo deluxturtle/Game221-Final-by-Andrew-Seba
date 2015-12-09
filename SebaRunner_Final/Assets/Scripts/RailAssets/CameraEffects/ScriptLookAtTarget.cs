@@ -51,6 +51,7 @@ public class ScriptLookAtTarget : MonoBehaviour {
             {
                 timePassed += Time.deltaTime;
                 transform.LookAt(targets[i].transform);
+                
                 yield return null;
             }
 
@@ -62,7 +63,7 @@ public class ScriptLookAtTarget : MonoBehaviour {
 
 	IEnumerator ReturnLook()
 	{
-	    startRotation = transform.rotation;
+        startRotation = transform.rotation;
         float lastRotateSpeed = 1;
 
         // Lerp code gotten from http://answers.unity3d.com/questions/672456/rotate-an-object-a-set-angle-over-time-c.html
@@ -80,6 +81,8 @@ public class ScriptLookAtTarget : MonoBehaviour {
             transform.rotation = Quaternion.Lerp(startRotation, Quaternion.Euler(Vector3.forward), t);
             yield return null;
         }
+        //Quick fix to lock the z rotation
+        transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, 0, 1);
         StopCoroutine("ReturnLook");
     }
 
