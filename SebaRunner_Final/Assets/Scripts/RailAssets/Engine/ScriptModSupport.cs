@@ -15,7 +15,9 @@ public class ScriptModSupport : MonoBehaviour
 	public ScriptEngine player;
     [Tooltip("Place your cate prefab that you want to see.")]
     public GameObject crate;
-
+    Vector3 crateAdjust = new Vector3(0, -0.5f, 0);
+    [Tooltip("Place your enemy prefab to spawn here.")]
+    public GameObject enemy;
 
 	string defaultModFileText = "Edit this file for modding timelines and delete this line";
 
@@ -92,6 +94,52 @@ public class ScriptModSupport : MonoBehaviour
 					string[] coords;
 					Vector3 target;
 					string[] keywords = inputLine.Split('_');
+
+                    #region Object Parsing
+                    if (keywords[0].ToUpper() == "O")
+                    {
+                        string[] words = keywords[1].Split(' ');
+                        switch (words[0].ToUpper())
+                        {
+                            case "CRATE":
+                                coords = words[1].Split(',');
+                                target = new Vector3(System.Convert.ToSingle(coords[0]),
+                                    System.Convert.ToSingle(coords[1]), System.Convert.ToSingle(coords[2]));
+
+                                GameObject tempCrate = (GameObject)Instantiate(crate, target + crateAdjust, Quaternion.identity);
+                                break;
+                            //case "PLAYER":
+                            //    Node tempPlayer = new Node();
+                            //    tempPlayer.isPlayer = true;
+                            //    coords = words[1].Split(',');
+
+                            //    tempPlayer.x = Convert.ToSingle(coords[0]);
+                            //    tempPlayer.y = Convert.ToSingle(coords[1]);
+                            //    tempPlayer.z = Convert.ToSingle(coords[2]);
+
+                            //    AddObject(tempPlayer, false);
+                            //    break;
+                            case "ENEMY":
+                                //tempEnemy.activationRange = (float)Convert.ToDecimal(words[1]);
+
+                                coords = words[2].Split(',');
+
+                                target = new Vector3(
+                                    System.Convert.ToSingle(coords[0]),
+                                    System.Convert.ToSingle(coords[1]),
+                                    System.Convert.ToSingle(coords[2]));
+
+                                GameObject tempEnemy = (GameObject)Instantiate(enemy, target, Quaternion.identity);
+                                tempEnemy.GetComponent<ScriptEnemy>().health = (float)System.Convert.ToDouble(words[1]);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+
+
+                    #endregion
+
                     #region Movement Parsing
                     if (keywords[0].ToUpper() == "M")
 					{
