@@ -24,7 +24,7 @@ public class ScriptHealth : MonoBehaviour
 
     public void _ChangeHealth(float amount)
     {
-        health += amount;
+        health += -amount;
         if(health < 0)
         {
             health = 0;

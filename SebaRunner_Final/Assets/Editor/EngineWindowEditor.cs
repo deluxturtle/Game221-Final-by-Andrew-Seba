@@ -46,7 +46,7 @@ public class EngineWindowEditor : EditorWindow {
         miniLeft = new GUIStyle(EditorStyles.miniButtonLeft);
         miniMid = new GUIStyle(EditorStyles.miniButtonMid);
 
-        engine = GameObject.FindWithTag("Player").GetComponent<ScriptEngine>();
+        engine = Selection.activeGameObject.GetComponent<ScriptEngine>();
         movements = engine.movements;
         effects = engine.effects;
         facings = engine.facings;
