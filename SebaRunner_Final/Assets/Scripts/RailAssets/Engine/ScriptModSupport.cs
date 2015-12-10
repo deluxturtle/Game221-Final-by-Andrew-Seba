@@ -107,6 +107,7 @@ public class ScriptModSupport : MonoBehaviour
                                     System.Convert.ToSingle(coords[1]), System.Convert.ToSingle(coords[2]));
 
                                 GameObject tempCrate = (GameObject)Instantiate(crate, target + crateAdjust, Quaternion.identity);
+
                                 break;
                             //case "PLAYER":
                             //    Node tempPlayer = new Node();

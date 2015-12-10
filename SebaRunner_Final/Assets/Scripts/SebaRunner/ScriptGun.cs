@@ -14,7 +14,7 @@ public enum GunType
 /// @Author: Andrew Seba
 /// @Description: Holds the properties of the gun.
 /// </summary>
-public class ScriptGun : MonoBehaviour{
+public class ScriptGun {
 
     public string gunName = "default";
     [Tooltip("The type of gun (controls ammotype)")]

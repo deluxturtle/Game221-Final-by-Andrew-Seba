@@ -89,14 +89,21 @@ public class ScriptEnemy : MonoBehaviour {
 
     void Update()
     {
-        visibleFromP1 = GetComponent<Renderer>().IsVisibleFrom(player1Cam);
-        visibleFromP2 = GetComponent<Renderer>().IsVisibleFrom(player2Cam);
+        //If it exsists
+        if (player1Cam)
+            visibleFromP1 = GetComponent<Renderer>().IsVisibleFrom(player1Cam);
+        else
+            visibleFromP1 = false;
+        if (player2Cam)
+            visibleFromP2 = GetComponent<Renderer>().IsVisibleFrom(player2Cam);
+        else
+            visibleFromP2 = false;
+
         switch (state)
         {
             case State.IDLE:
                 if (previousState != state)
                 {
-                    Debug.Log("Idle");
                     StopCoroutine("LookAtTarget");
                     CancelInvoke("Attack");
                     previousState = state;
@@ -105,7 +112,6 @@ public class ScriptEnemy : MonoBehaviour {
             case State.ATTACK:
                 if (previousState != state)
                 {
-                    Debug.Log("Attack");
                     StartCoroutine("LookAtTarget");
                     previousState = state;
                 }

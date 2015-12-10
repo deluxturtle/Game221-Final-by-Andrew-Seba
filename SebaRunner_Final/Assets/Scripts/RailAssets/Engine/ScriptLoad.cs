@@ -45,18 +45,6 @@ public class ScriptLoad : MonoBehaviour {
                 {
                     while ((lineOfText = reader.ReadLine()) != null)
                     {
-                        //if(lineNumber < 3)
-                        //{
-                        //	switch (lineNumber)
-                        //	{
-                        //		case 0:
-                        //			tempItem.author = lineOfText;
-                        //			break;
-                        //		case 1:
-                        //			tempItem.name = lineOfText;
-                        //			break;
-                        //	}
-                        //}
                         string variable = "";
                         string value = "";
 
@@ -98,7 +86,7 @@ public class ScriptLoad : MonoBehaviour {
             }
 		}
 
-		if(levelNames.Count <= 0)
+		if(levelNames.Count <= 0 && textConsole != null)
 		{
 			textConsole.text += "\nNo Levels Found in <" + Application.dataPath + "/>"; 
 		}
@@ -123,11 +111,6 @@ public class ScriptLoad : MonoBehaviour {
         File.WriteAllText(Application.dataPath + "/waypoints.txt", input);
     }
 
-    public void _LoadTestLevel()
-    {
-        Application.LoadLevel("shooterTest");
-    }
-
     string FindLevel(string pName)
 	{
 		foreach(Item levelItem in levels)
@@ -137,11 +120,7 @@ public class ScriptLoad : MonoBehaviour {
 
 				return levelItem.fileName;
 			}
-				
 		}
 		return "/Resources/embedded.txt";
-		
 	}
-
-
 }

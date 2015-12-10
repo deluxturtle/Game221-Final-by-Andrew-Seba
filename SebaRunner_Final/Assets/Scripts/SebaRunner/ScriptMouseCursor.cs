@@ -22,10 +22,19 @@ public class ScriptMouseCursor : MonoBehaviour {
     void Start()
     {
 
-        curGun = transform.GetComponent<ScriptGun>();
-        if(curGun == null)
+        try
         {
-            Debug.Log("No gun attached to player");
+            curGun = GetComponent<ScriptPlayerSetup>().myGun;
+            curGun.gunShot = GetComponent<ScriptPlayerSetup>().gunShotSound;
+        }
+        catch
+        {
+            Debug.Log("LoadSceneFrom Main Menu!!");
+        }
+
+        if (curGun == null)
+        {
+            Debug.Log("No gun on the player!");
         }
         Cursor.visible = false;
         if(cursorObject == null)
@@ -44,26 +53,28 @@ public class ScriptMouseCursor : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         cursorObject.transform.position = Input.mousePosition;
-
-        if (!curGun.automatic && Input.GetButtonDown("Fire1") && canFire)
+        if(curGun != null)
         {
-            canFire = false;
-            coolDownTime = curGun.fireRate;
+            if (!curGun.automatic && Input.GetButtonDown("Fire1") && canFire)
+            {
+                canFire = false;
+                coolDownTime = curGun.fireRate;
 
-            ShootGun();
+                ShootGun();
 
-            StartCoroutine("ResetTrigger");
+                StartCoroutine("ResetTrigger");
+            }
+            if (curGun.automatic && Input.GetButton("Fire1") && canFire)
+            {
+                canFire = false;
+                coolDownTime = curGun.fireRate;
+
+                ShootGun();
+
+                StartCoroutine("ResetTrigger");
+            }
         }
-        if(curGun.automatic && Input.GetButton("Fire1") && canFire)
-        {
-            canFire = false;
-            coolDownTime = curGun.fireRate;
-
-            ShootGun();
-
-            StartCoroutine("ResetTrigger");
-        }
-	}
+    }
 
     IEnumerator ResetTrigger()
     {

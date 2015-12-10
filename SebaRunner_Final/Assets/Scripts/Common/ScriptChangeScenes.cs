@@ -16,4 +16,14 @@ public class ScriptChangeScenes : MonoBehaviour {
     {
         Application.LoadLevel("Credits");
     }
+
+    public void _LoadGunSelect()
+    {
+        Application.LoadLevel("SceneGunSelect");
+    }
+
+    public void _LoadLevelSelect()
+    {
+        Application.LoadLevel("SceneLevelSelect");
+    }
 }
