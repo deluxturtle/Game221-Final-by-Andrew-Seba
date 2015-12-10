@@ -35,7 +35,13 @@ public class ScriptEnemy : MonoBehaviour {
     bool activated = false;
 
     GameObject player1;
+    Camera player1Cam;
     GameObject player2;
+    Camera player2Cam;
+    bool visibleFromP1 = false;
+    bool visibleFromP2 = false;
+    float player1Distance;
+    float player2Distance;
 
     GameObject currentTarget;
 
@@ -75,21 +81,33 @@ public class ScriptEnemy : MonoBehaviour {
     void Start()
     {
         player1 = GameObject.Find("Player");
+        player1Cam = player1.GetComponentInChildren<Camera>();
         player2 = GameObject.Find("Player2");
-        StartCoroutine("WaitForActivation");
+        player2Cam = player2.GetComponentInChildren<Camera>();
+        StartCoroutine("CheckDistance");
     }
 
     void Update()
     {
+        visibleFromP1 = GetComponent<Renderer>().IsVisibleFrom(player1Cam);
+        visibleFromP2 = GetComponent<Renderer>().IsVisibleFrom(player2Cam);
         switch (state)
         {
             case State.IDLE:
+                if (previousState != state)
+                {
+                    Debug.Log("Idle");
+                    StopCoroutine("LookAtTarget");
+                    CancelInvoke("Attack");
+                    previousState = state;
+                }
                 break;
             case State.ATTACK:
                 if (previousState != state)
                 {
+                    Debug.Log("Attack");
                     StartCoroutine("LookAtTarget");
-                    state = previousState;
+                    previousState = state;
                 }
                 break;
         }
@@ -104,6 +122,7 @@ public class ScriptEnemy : MonoBehaviour {
         curentGunFlare = tempGunFlare;
         Invoke("KillFlare", 0.1f);
 
+        
         player1.GetComponent<ScriptHealth>()._ChangeHealth(attackDamage);
     }
 
@@ -121,34 +140,75 @@ public class ScriptEnemy : MonoBehaviour {
         }
     }
 
-    IEnumerator WaitForActivation()
-    { 
-        while (!activated) 
-        {
-            if(Vector3.Distance(transform.position, player1.transform.position) < activationRange)
+    IEnumerator CheckDistance()
+    {
+
+            while (!activated)//Try to be activated
             {
-                currentTarget = player1;
-                activated = true;
-                state = State.ATTACK;
+                player1Distance = Vector3.Distance(transform.position, player1.transform.position);
+                player2Distance = Vector3.Distance(transform.position, player2.transform.position);
+
+                if (player1Distance < activationRange || player2Distance < activationRange)
+                {
+                    if (player1Distance < player2Distance)
+                    {
+                        currentTarget = player1;
+                    }
+                    else
+                    {
+                        currentTarget = player2;
+                    }
+                    activated = true;
+                    state = State.ATTACK;
+                }
+                yield return null;
             }
-            else if(Vector3.Distance(transform.position, player2.transform.position) < activationRange)
+            if (attackType == AttackType.MoveTowardsPlayer)
+                StartCoroutine("MoveTowardsPlayer");
+            else
+                DuckAndCover();
+
+        while (true)//Once Activated Always Activated
+        {
+            while (activated)//Are they looking at me? if not go back to idle
             {
-                currentTarget = player2;
+                float player1Distance = Vector3.Distance(transform.position, player1.transform.position);
+                float player2Distance = Vector3.Distance(transform.position, player2.transform.position);
+                if (!visibleFromP1 && !visibleFromP2)
+                {
+                    activated = false;
+                    state = State.IDLE;
+                }
+                yield return null;
+            }
+
+
+            //If visible from either player re activate!
+            if (visibleFromP1 || visibleFromP2)
+            {
+                if (player1Distance < player2Distance)
+                {
+                    currentTarget = player1;
+                }
+                else
+                {
+                    currentTarget = player2;
+                }
                 activated = true;
                 state = State.ATTACK;
+                //Restart Attack or move
+                if (attackType == AttackType.MoveTowardsPlayer)
+                    StartCoroutine("MoveTowardsPlayer");
+                else
+                    DuckAndCover();
             }
             yield return null;
         }
-        if (attackType == AttackType.MoveTowardsPlayer)
-            StartCoroutine("MoveTowardsPlayer");
-        else
-            DuckAndCover();
     }
 
     //Move the enemy towards player
     IEnumerator MoveTowardsPlayer()
     {
-        StopCoroutine("WaitForActivation");
         while (true)
         {
             transform.Translate((currentTarget.transform.position - transform.position) * moveSpeed * Time.deltaTime);
@@ -160,7 +220,6 @@ public class ScriptEnemy : MonoBehaviour {
     void DuckAndCover()
     {
         //TODO
-        StopCoroutine("WaitForActivation");
         InvokeRepeating("Attack", 0, reloadSpeed);
     }
 }
