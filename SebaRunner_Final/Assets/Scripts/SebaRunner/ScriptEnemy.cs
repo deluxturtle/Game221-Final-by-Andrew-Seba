@@ -24,6 +24,7 @@ public class ScriptEnemy : MonoBehaviour {
 
     [Tooltip("Gun Flare Effect Object")]
     public GameObject gunFlare;
+    public GameObject gunFlarePos;
 
     public AttackType attackType = AttackType.MoveTowardsPlayer;
 
@@ -98,7 +99,8 @@ public class ScriptEnemy : MonoBehaviour {
     {
         GameObject tempGunFlare = (GameObject)Instantiate(gunFlare);
         tempGunFlare.transform.parent = transform;
-        tempGunFlare.transform.position = new Vector3(transform.position.x -0.095f, transform.position.y + 0.2f, transform.position.z- 1.274f);
+        tempGunFlare.transform.position = gunFlarePos.transform.position;
+        
         curentGunFlare = tempGunFlare;
         Invoke("KillFlare", 0.1f);
 
@@ -115,6 +117,7 @@ public class ScriptEnemy : MonoBehaviour {
         while (true)
         {
             transform.LookAt(currentTarget.transform, Vector3.up);
+            yield return null;
         }
     }
 
