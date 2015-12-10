@@ -291,4 +291,22 @@ public class ScriptLoadGuns : MonoBehaviour {
         }
 
     }
+
+    public void LoadPreviousGun()
+    {
+        if(loadedGuns.Count > 0)
+        {
+            gunIndex -= 1;
+            if (gunIndex < 0)
+            {
+                LoadGun(loadedGuns[loadedGuns.Count - 1]);
+                gunIndex = loadedGuns.Count - 1;
+            }
+            else
+            {
+                LoadGun(loadedGuns[gunIndex]);
+            }
+        }
+
+    }
 }

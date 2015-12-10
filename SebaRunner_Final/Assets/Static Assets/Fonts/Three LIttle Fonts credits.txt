@@ -1,0 +1,5 @@
+Name: Three Little Bitmap Fonts
+Author: Michele Bucelli - AKA 'Buch'
+http://blog-buch.rhcloud.com
+Source: http://opengameart.org/content/three-little-bitmap-fonts
+Licence: CCO

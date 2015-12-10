@@ -1320,6 +1320,7 @@ public class EngineWindowEditor : EditorWindow {
     void OnLostFocus()
     {
         RecordData();
+        
     }
 
     void RecordData()
