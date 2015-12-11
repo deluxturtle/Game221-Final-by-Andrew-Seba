@@ -19,6 +19,7 @@ public class ScriptEnemy : MonoBehaviour {
     public float activationRange = 5;
     public float health = 1;
     public float attackDamage = 1;
+    public float fireRate = 1.0f;
     public float reloadSpeed = 3.0f;
     public float moveSpeed = 0.4f;
 
@@ -217,7 +218,7 @@ public class ScriptEnemy : MonoBehaviour {
     {
         while (true)
         {
-            transform.Translate((currentTarget.transform.position - transform.position) * moveSpeed * Time.deltaTime);
+            transform.Translate((Vector3.forward) * moveSpeed * Time.deltaTime);
             //transform.position = Vector3.MoveTowards(transform.position, player.transform.position, moveSpeed);
             yield return null;
         }
@@ -226,6 +227,6 @@ public class ScriptEnemy : MonoBehaviour {
     void DuckAndCover()
     {
         //TODO
-        InvokeRepeating("Attack", 0, reloadSpeed);
+        InvokeRepeating("Attack", 0, fireRate);
     }
 }

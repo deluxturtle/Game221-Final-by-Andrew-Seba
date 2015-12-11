@@ -106,7 +106,7 @@ public class ScriptModSupport : MonoBehaviour
                                 target = new Vector3(System.Convert.ToSingle(coords[0]),
                                     System.Convert.ToSingle(coords[1]), System.Convert.ToSingle(coords[2]));
 
-                                GameObject tempCrate = (GameObject)Instantiate(crate, target + crateAdjust, Quaternion.identity);
+                                Instantiate(crate, target + crateAdjust, Quaternion.identity);
 
                                 break;
                             //case "PLAYER":

@@ -9,21 +9,29 @@ public class ScriptNetworkLevelHandelr : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        manager = GameObject.Find("NetworkManager").GetComponent<ScriptSebaRunnerNetworkManager>();
-        gameSetup = GameObject.Find("GameSetup").GetComponent<ScriptLevelSelection>();
-        if(manager.startedGameFrom == Origin.CLIENT)
+        try
         {
-            clientBlock.SetActive(true);
+            manager = GameObject.Find("NetworkManager").GetComponent<ScriptSebaRunnerNetworkManager>();
+            if (manager.startedGameFrom == Origin.CLIENT)
+            {
+                clientBlock.SetActive(true);
+            }
+        }
+        catch
+        {
+            Debug.Log("No Network Manager");
+        }
+        finally
+        {
+            try
+            {
+                gameSetup = GameObject.Find("GameSetup").GetComponent<ScriptLevelSelection>();
+            }
+            catch
+            {
+                Debug.Log("Couldn't Find GameSetup Game object.");
+            }
         }
 
 	}
-    
-    public void SendLevel()
-    {
-        GameObject[] allPlayers = GameObject.FindGameObjectsWithTag("Player");
-        foreach (GameObject player in allPlayers)
-        {
-            player.GetComponent<ScriptGetLevelFromHost>().SetLevel(gameSetup.selectedLevel);
-        }
-    }
 }

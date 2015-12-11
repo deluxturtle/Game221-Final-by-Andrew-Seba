@@ -33,7 +33,7 @@ public class ScriptLoad : MonoBehaviour {
 			if (file.Name.EndsWith(".srl"))
 			{
 				levelNames.Add(file.Name);
-				textConsole.text += "\n" + file;
+				//textConsole.text += "\n" + file;
 
 				reader = file.OpenText();
 

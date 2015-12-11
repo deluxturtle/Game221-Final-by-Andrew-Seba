@@ -15,7 +15,6 @@ public class ScriptLevelSelection : MonoBehaviour {
     public void _SetLevelToLevel1()
     {
         selectedLevel = "shooterTest";
-
     }
 
     public void SetMyGun(ScriptGun pGun)
